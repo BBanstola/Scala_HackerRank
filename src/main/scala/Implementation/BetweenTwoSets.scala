@@ -1,4 +1,5 @@
-package Implementation
+import scala.io._
+import java.io._
 
 object Result {
 
@@ -12,19 +13,32 @@ object Result {
    */
 
   def getTotalX(a: Array[Int], b: Array[Int]): Int = {
-    var cnt = 0
-    val list1 =a++b
-    for(i <- 2 to list1.max){
-      if (list1.forall(x => x % i == 0 || i % x == 0)) cnt += 1
+    // Write your code here
+    def first(num: Int, minimum:Int):Array[Int]={
+      (minimum to 100).filter(x => x % num == 0).toArray
     }
-    cnt
+
+    def second(num: Int, minimum:Int):Array[Int] ={
+      (minimum to num).filter(x => num % x == 0 ).toArray
+    }
+    def inter(arr: Array[Array[Int]]):Array[Int] = {
+      if (arr.tail.isEmpty) arr.head
+      else arr.head intersect inter(arr.tail)
+    }
+    val a1 = a.map(x => first(x, a.min))
+
+    val b1 = b.map(x => second(x, a.min))
+
+    val append = a1 ++  (b1)
+
+    inter(append).length
   }
 
 }
 
 object BetweenTwoSets {
   def main(args: Array[String]) {
-    /*val printWriter = new PrintWriter(sys.env("OUTPUT_PATH"))
+    val printWriter = new PrintWriter(sys.env("OUTPUT_PATH"))
 
     val firstMultipleInput = StdIn.readLine.replaceAll("\\s+$", "").split(" ")
 
@@ -41,7 +55,5 @@ object BetweenTwoSets {
     printWriter.println(total)
 
     printWriter.close()
-    */
-    val total = Result.getTotalX(Array(2,4), Array(16,32,96))
   }
 }
